@@ -11,5 +11,13 @@
 **/node_modules/
 **/dist/
 
+# Python
+**/.venv/
+**/__pycache__/
+**/*.pyc
+
+# Claude Code
+.claude/
+
 # macOS
 .DS_Store
