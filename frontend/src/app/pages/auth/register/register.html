@@ -1,0 +1,270 @@
+<div class="auth-page">
+  <canvas #canvas class="particle-canvas"></canvas>
+  <div class="orb orb-top-right"></div>
+  <div class="orb orb-bottom-left"></div>
+
+  <div class="auth-card">
+
+    <!-- SOL: Branding -->
+    <div class="brand-panel">
+      <div class="brand-content">
+
+        <div class="brand-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span>VESTLY<em>.ai</em></span>
+        </div>
+
+        <div class="brand-headline">
+          <h2>Finansal<br>yolculuğunuz<br><span class="glow-word">başlıyor.</span></h2>
+          <p>Dakikalar içinde hesabınızı oluşturun, yapay zekanın gücüyle finansal özgürlüğünüzü keşfedin.</p>
+        </div>
+
+        <!-- Adım göstergesi -->
+        <div class="steps-indicator">
+          <div class="step-dot" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">
+            <span>1</span>
+          </div>
+          <div class="step-connector" [class.done]="currentStep > 1"></div>
+          <div class="step-dot" [class.active]="currentStep >= 2">
+            <span>2</span>
+          </div>
+        </div>
+
+        <div class="step-labels">
+          <span [class.active-label]="currentStep === 1">Kişisel Bilgiler</span>
+          <span [class.active-label]="currentStep === 2">Hesap & Tercihler</span>
+        </div>
+
+        <!-- Güven rozetleri -->
+        <div class="trust-badges">
+          <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>256-bit SSL</span>
+          </div>
+          <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Anlık AI</span>
+          </div>
+          <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/>
+            </svg>
+            <span>7/24 Aktif</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="panel-glow"></div>
+    </div>
+
+    <!-- SAĞ: Form -->
+    <div class="form-panel">
+      <div class="form-inner">
+
+        <div class="form-header">
+          @if (currentStep === 1) {
+            <h1>Hesap Oluştur</h1>
+            <p>Adım 1 / 2 — Kişisel bilgileriniz</p>
+          } @else {
+            <h1>Neredeyse Bitti</h1>
+            <p>Adım 2 / 2 — Hesap ve tercihler</p>
+          }
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <!-- ADIM 1 -->
+          @if (currentStep === 1) {
+            <div class="form-step">
+
+              <div class="field-row">
+                <div class="field-group" [class.has-error]="f('firstName').invalid && f('firstName').touched">
+                  <label>Ad</label>
+                  <div class="input-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <input type="text" formControlName="firstName" placeholder="Adınız"/>
+                  </div>
+                  @if (f('firstName').invalid && f('firstName').touched) {
+                    <span class="err">En az 2 karakter</span>
+                  }
+                </div>
+
+                <div class="field-group" [class.has-error]="f('lastName').invalid && f('lastName').touched">
+                  <label>Soyad</label>
+                  <div class="input-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <input type="text" formControlName="lastName" placeholder="Soyadınız"/>
+                  </div>
+                  @if (f('lastName').invalid && f('lastName').touched) {
+                    <span class="err">En az 2 karakter</span>
+                  }
+                </div>
+              </div>
+
+              <div class="field-group" [class.has-error]="f('email').invalid && f('email').touched">
+                <label>E-posta Adresi</label>
+                <div class="input-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  <input type="email" formControlName="email" placeholder="ornek@mail.com"/>
+                </div>
+                @if (f('email').invalid && f('email').touched) {
+                  <span class="err">Geçerli bir e-posta girin</span>
+                }
+              </div>
+
+              <div class="field-group" [class.has-error]="f('dateOfBirth').invalid && f('dateOfBirth').touched">
+                <label>Doğum Tarihi</label>
+                <div class="input-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <input type="date" formControlName="dateOfBirth"/>
+                </div>
+                @if (f('dateOfBirth').invalid && f('dateOfBirth').touched) {
+                  <span class="err">Doğum tarihi gerekli</span>
+                }
+              </div>
+
+              <button type="button" class="btn-submit" (click)="nextStep()">
+                <span>Devam Et</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+            </div>
+          }
+
+          <!-- ADIM 2 -->
+          @if (currentStep === 2) {
+            <div class="form-step">
+
+              <div class="field-group" [class.has-error]="f('password').invalid && f('password').touched">
+                <label>Şifre</label>
+                <div class="input-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                  </svg>
+                  <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="En az 8 karakter"/>
+                  <button type="button" class="toggle-pw" (click)="showPassword = !showPassword">
+                    @if (showPassword) {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    } @else {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    }
+                  </button>
+                </div>
+                @if (f('password').invalid && f('password').touched) {
+                  <span class="err">Şifre en az 8 karakter olmalı</span>
+                }
+              </div>
+
+              <div class="field-group" [class.has-error]="(f('confirmPassword').invalid && f('confirmPassword').touched) || passwordMismatch">
+                <label>Şifre Tekrar</label>
+                <div class="input-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                  </svg>
+                  <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Şifrenizi tekrar girin"/>
+                  <button type="button" class="toggle-pw" (click)="showConfirmPassword = !showConfirmPassword">
+                    @if (showConfirmPassword) {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    } @else {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    }
+                  </button>
+                </div>
+                @if (passwordMismatch) {
+                  <span class="err">Şifreler eşleşmiyor</span>
+                }
+              </div>
+
+              <div class="field-row">
+                <div class="field-group">
+                  <label>Para Birimi</label>
+                  <div class="input-wrap select-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                    </svg>
+                    <select formControlName="currency">
+                      <option value="TRY">₺ Türk Lirası</option>
+                      <option value="USD">$ Amerikan Doları</option>
+                      <option value="EUR">€ Euro</option>
+                      <option value="GBP">£ İngiliz Sterlini</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label>Dil Tercihi</label>
+                  <div class="input-wrap select-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+                    </svg>
+                    <select formControlName="language">
+                      <option value="tr">Türkçe</option>
+                      <option value="en">English</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              @if (errorMessage) {
+                <div class="alert-error">{{ errorMessage }}</div>
+              }
+
+              <div class="btn-group">
+                <button type="button" class="btn-back" (click)="prevStep()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Geri
+                </button>
+                <button type="submit" class="btn-submit" [disabled]="isLoading">
+                  @if (isLoading) {
+                    <span class="spinner"></span>
+                  } @else {
+                    <span>Hesap Oluştur</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  }
+                </button>
+              </div>
+
+            </div>
+          }
+
+        </form>
+
+        <div class="card-footer">
+          Zaten hesabınız var mı?
+          <a routerLink="/auth/login">Giriş Yapın</a>
+        </div>
+
+        <div class="back-link">
+          <a routerLink="/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Ana sayfaya dön
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

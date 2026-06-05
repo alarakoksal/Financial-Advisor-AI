@@ -1,0 +1,53 @@
+<aside class="sidebar">
+
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="logo-text">VESTLY<em>.ai</em></span>
+  </div>
+
+  <!-- Nav -->
+  <nav class="sidebar-nav">
+    @for (item of navItems; track item.route) {
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+        class="nav-item"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path [attr.d]="item.icon" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <!-- Alt: Tema + Çıkış -->
+  <div class="sidebar-footer">
+    <button class="theme-toggle-btn" (click)="theme.toggle()" [title]="theme.isLight ? 'Koyu temaya geç' : 'Açık temaya geç'">
+      @if (theme.isLight) {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Koyu Tema</span>
+      } @else {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Açık Tema</span>
+      }
+    </button>
+    <button class="logout-btn" (click)="auth.logout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Çıkış Yap</span>
+    </button>
+  </div>
+
+</aside>

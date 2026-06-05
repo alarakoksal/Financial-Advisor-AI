@@ -1,0 +1,159 @@
+<div class="auth-page">
+  <canvas #canvas class="particle-canvas"></canvas>
+  <div class="orb orb-top-right"></div>
+  <div class="orb orb-bottom-left"></div>
+
+  <div class="auth-card">
+
+    <!-- SOL: Branding -->
+    <div class="brand-panel">
+      <div class="brand-content">
+
+        <div class="brand-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span>VESTLY<em>.ai</em></span>
+        </div>
+
+        <div class="brand-headline">
+          <h2>Finansal<br>zekânızı<br><span class="glow-word">keşfedin.</span></h2>
+          <p>Yapay zeka ile desteklenen kişisel finansal danışmanınız her zaman yanınızda.</p>
+        </div>
+
+        <!-- Mini Feature List -->
+        <ul class="feature-list">
+          <li>
+            <div class="feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <strong>Anlık AI Analizi</strong>
+              <span>Saniyeler içinde finansal içgörü</span>
+            </div>
+          </li>
+          <li>
+            <div class="feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <strong>Banka Güvenliği</strong>
+              <span>256-bit şifreleme ile korunma</span>
+            </div>
+          </li>
+          <li>
+            <div class="feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <strong>7/24 İzleme</strong>
+              <span>Kesintisiz portföy takibi</span>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Dekoratif Mini Kart -->
+        <div class="deco-card">
+          <div class="deco-card-row">
+            <div class="deco-avatar">AI</div>
+            <div class="deco-text">
+              <strong>AI Önerisi Hazır</strong>
+              <span>Tasarruf oranınız %42 — hedefin %80'inde</span>
+            </div>
+          </div>
+          <div class="deco-bar">
+            <div class="deco-bar-fill"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Dekoratif arka ışık -->
+      <div class="panel-glow"></div>
+    </div>
+
+    <!-- SAĞ: Login Formu -->
+    <div class="form-panel">
+      <div class="form-inner">
+
+        <div class="form-header">
+          <h1>Hoş Geldiniz</h1>
+          <p>Hesabınıza erişmek için giriş yapın</p>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+
+          <div class="field-group" [class.has-error]="email.invalid && email.touched">
+            <label>E-posta Adresi</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <input type="email" formControlName="email" placeholder="ornek@mail.com" autocomplete="email"/>
+            </div>
+            @if (email.invalid && email.touched) {
+              <span class="err">Geçerli bir e-posta adresi girin</span>
+            }
+          </div>
+
+          <div class="field-group" [class.has-error]="password.invalid && password.touched">
+            <div class="label-row">
+              <label>Şifre</label>
+              <a href="#" class="forgot-link">Şifremi unuttum</a>
+            </div>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+              </svg>
+              <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••" autocomplete="current-password"/>
+              <button type="button" class="toggle-pw" (click)="showPassword = !showPassword">
+                @if (showPassword) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                } @else {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                }
+              </button>
+            </div>
+            @if (password.invalid && password.touched) {
+              <span class="err">Şifre en az 6 karakter olmalı</span>
+            }
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert-error">{{ errorMessage }}</div>
+          }
+
+          <button type="submit" class="btn-submit" [disabled]="isLoading">
+            @if (isLoading) {
+              <span class="spinner"></span>
+            } @else {
+              <span>Giriş Yap</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            }
+          </button>
+
+        </form>
+
+        <div class="divider"><span>veya</span></div>
+
+        <div class="card-footer">
+          Hesabınız yok mu?
+          <a routerLink="/auth/register">Ücretsiz Kayıt Olun</a>
+        </div>
+
+        <div class="back-link">
+          <a routerLink="/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Ana sayfaya dön
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

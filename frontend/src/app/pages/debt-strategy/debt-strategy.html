@@ -1,0 +1,185 @@
+<div class="ds-shell">
+  <app-sidebar></app-sidebar>
+  <div class="ds-content">
+
+    <div class="page-header">
+      <div class="page-badge">⚔️ Borç Ödeme Stratejisi</div>
+      <h1 class="page-title">Snowball vs Avalanche</h1>
+      <p class="page-sub">İki farklı borç ödeme stratejisini karşılaştırın, hangisinde daha az faiz ödediğinizi görün</p>
+    </div>
+
+    <!-- Method explainer -->
+    <div class="methods-row">
+      <div class="method-card snowball">
+        <div class="method-icon">❄️</div>
+        <div>
+          <h3>Snowball Metodu</h3>
+          <p>En küçük borçtan başla, bitince ödemeyi bir sonrakine ekle. Psikolojik motivasyon sağlar.</p>
+        </div>
+      </div>
+      <div class="method-card avalanche">
+        <div class="method-icon">🌊</div>
+        <div>
+          <h3>Avalanche Metodu</h3>
+          <p>En yüksek faizli borçtan başla. Matematiksel olarak en az faiz ödenmesini sağlar.</p>
+        </div>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <span>Borçlar yükleniyor...</span>
+      </div>
+    } @else if (debts.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Borç kaydı bulunamadı</h3>
+        <p>Önce <strong>Borç Takibi</strong> sayfasından borçlarınızı ekleyin.</p>
+      </div>
+    } @else {
+
+      <div class="layout">
+
+        <!-- Debt list + extra payment -->
+        <div class="left-col">
+          <div class="debts-card">
+            <h3 class="card-title">Borçlarınız</h3>
+            <div class="debt-list">
+              @for (d of debts; track d.id) {
+                <div class="debt-row">
+                  <div class="dr-left">
+                    <span class="dr-name">{{ d.name }}</span>
+                    <span class="dr-rate">%{{ d.interestRate }} faiz</span>
+                  </div>
+                  <div class="dr-right">
+                    <span class="dr-balance">{{ fmt(d.balance) }}</span>
+                    <span class="dr-min">{{ fmt(d.minPayment) }}/ay</span>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="extra-field">
+              <label>Ekstra Aylık Ödeme</label>
+              <div class="input-wrap">
+                <span class="prefix">₺</span>
+                <input type="number" [(ngModel)]="extraPayment"/>
+              </div>
+              <span class="field-hint">Minimum taksit üzerine ekleyeceğiniz ek ödeme</span>
+            </div>
+
+            <button class="btn-calc" (click)="calculate()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round"/>
+              </svg>
+              Stratejileri Karşılaştır
+            </button>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="right-col">
+
+          @if (!hasResult) {
+            <div class="empty-result">
+              <span style="font-size:2.5rem">⚔️</span>
+              <p>Parametreleri belirleyin ve karşılaştırmayı başlatın</p>
+            </div>
+          }
+
+          @if (hasResult && snowball && avalanche) {
+
+            <!-- Winner banner -->
+            <div class="winner-banner" [class.avalanche-win]="winner === 'avalanche'" [class.snowball-win]="winner === 'snowball'">
+              @if (winner !== 'tie') {
+                <span class="winner-emoji">{{ winner === 'avalanche' ? '🌊' : '❄️' }}</span>
+                <div>
+                  <strong>{{ winnerName }} Daha Avantajlı</strong>
+                  <span> — {{ fmt(saving) }} daha az faiz ödersiniz</span>
+                </div>
+              } @else {
+                <span>⚖️ İki strateji neredeyse eşit sonuç veriyor</span>
+              }
+            </div>
+
+            <!-- Comparison cards -->
+            <div class="compare-row">
+              <div class="compare-card" [class.winner-card]="winner === 'snowball'">
+                <div class="cc-head">
+                  <span class="cc-emoji">❄️</span>
+                  <span class="cc-name">Snowball</span>
+                  @if (winner === 'snowball') { <span class="winner-tag">KAZANAN</span> }
+                </div>
+                <div class="cc-stat">
+                  <span class="cs-label">Toplam Faiz</span>
+                  <span class="cs-val red">{{ fmt(snowball.totalInterest) }}</span>
+                </div>
+                <div class="cc-stat">
+                  <span class="cs-label">Kapanma Süresi</span>
+                  <span class="cs-val">{{ fmtMonths(snowball.totalMonths) }}</span>
+                </div>
+                <div class="cc-order">
+                  <span class="co-label">Ödeme Sırası</span>
+                  @for (name of snowball.payoffOrder; track name; let i = $index) {
+                    <div class="co-item">
+                      <span class="co-num">{{ i + 1 }}</span>
+                      <span>{{ name }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="compare-card" [class.winner-card]="winner === 'avalanche'">
+                <div class="cc-head">
+                  <span class="cc-emoji">🌊</span>
+                  <span class="cc-name">Avalanche</span>
+                  @if (winner === 'avalanche') { <span class="winner-tag">KAZANAN</span> }
+                </div>
+                <div class="cc-stat">
+                  <span class="cs-label">Toplam Faiz</span>
+                  <span class="cs-val red">{{ fmt(avalanche.totalInterest) }}</span>
+                </div>
+                <div class="cc-stat">
+                  <span class="cs-label">Kapanma Süresi</span>
+                  <span class="cs-val">{{ fmtMonths(avalanche.totalMonths) }}</span>
+                </div>
+                <div class="cc-order">
+                  <span class="co-label">Ödeme Sırası</span>
+                  @for (name of avalanche.payoffOrder; track name; let i = $index) {
+                    <div class="co-item">
+                      <span class="co-num">{{ i + 1 }}</span>
+                      <span>{{ name }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Bar chart -->
+            <div class="chart-card">
+              <h3 class="chart-title">Toplam Faiz Karşılaştırması</h3>
+              <apx-chart
+                [series]="series"
+                [chart]="chart"
+                [xaxis]="xaxis"
+                [yaxis]="yaxis"
+                [tooltip]="tooltip"
+                [grid]="grid"
+                [plotOptions]="plotOptions"
+                [dataLabels]="dataLabels"
+                [colors]="colors">
+              </apx-chart>
+            </div>
+
+          }
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

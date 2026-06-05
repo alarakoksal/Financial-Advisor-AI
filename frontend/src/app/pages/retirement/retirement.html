@@ -1,0 +1,151 @@
+<div class="rt-shell">
+  <app-sidebar></app-sidebar>
+  <div class="rt-content">
+
+    <div class="page-header">
+      <div class="page-badge">🏖️ Emeklilik Planlayıcısı</div>
+      <h1 class="page-title">Emeklilik Simülasyonu</h1>
+      <p class="page-sub">Yaşınıza, birikiminize ve aylık katkınıza göre emeklilik projeksiyonu oluşturun</p>
+    </div>
+
+    <div class="layout">
+
+      <!-- Inputs -->
+      <div class="inputs-card">
+        <h3 class="card-title">Bilgileriniz</h3>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label>Şu anki yaşınız</label>
+            <input type="number" [(ngModel)]="currentAge" min="18" max="80"/>
+          </div>
+          <div class="field-group">
+            <label>Emeklilik yaşı</label>
+            <input type="number" [(ngModel)]="retirementAge" min="40" max="90"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Mevcut birikim</label>
+          <div class="input-wrap"><span class="prefix">₺</span><input type="number" [(ngModel)]="currentSavings"/></div>
+        </div>
+
+        <div class="field-group">
+          <label>Aylık katkı</label>
+          <div class="input-wrap"><span class="prefix">₺</span><input type="number" [(ngModel)]="monthlyContrib"/></div>
+        </div>
+
+        <div class="field-group">
+          <label>Emeklilikte aylık gider</label>
+          <div class="input-wrap"><span class="prefix">₺</span><input type="number" [(ngModel)]="monthlyExpense"/></div>
+          <span class="field-hint">Bugünkü değerle, enflasyon otomatik uygulanır</span>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label>Yıllık getiri (%)</label>
+            <input type="number" [(ngModel)]="annualReturn" step="0.5"/>
+          </div>
+          <div class="field-group">
+            <label>Enflasyon (%)</label>
+            <input type="number" [(ngModel)]="inflationRate" step="0.5"/>
+          </div>
+        </div>
+
+        <button class="btn-calc" (click)="calculate()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round"/>
+          </svg>
+          Hesapla
+        </button>
+      </div>
+
+      <!-- Results -->
+      <div class="results-col">
+
+        @if (!hasResult) {
+          <div class="empty-result">
+            <span class="empty-emoji">🏖️</span>
+            <p>Bilgilerinizi girin ve emeklilik planınızı görün</p>
+          </div>
+        }
+
+        @if (hasResult) {
+
+          <!-- KPI row -->
+          <div class="kpi-row">
+            <div class="kpi-card primary">
+              <span class="kpi-label">Emeklilik Birikimi</span>
+              <span class="kpi-val">{{ fmt(retirementBalance) }}</span>
+              <span class="kpi-sub">{{ yearsToRetire }} yıl sonra</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Reel Değer (Bugün ₺)</span>
+              <span class="kpi-val muted">{{ fmt(realBalance) }}</span>
+              <span class="kpi-sub">enflasyona göre düzeltilmiş</span>
+            </div>
+            <div class="kpi-card" [style.border-color]="coverageColor + '40'">
+              <span class="kpi-label">Birikimin Ömrü</span>
+              <span class="kpi-val" [style.color]="coverageColor">{{ coverageLabel }}</span>
+              <span class="kpi-sub">emeklilikte dayanır</span>
+            </div>
+          </div>
+
+          <!-- Early retirement banner -->
+          @if (canRetireAt) {
+            <div class="early-banner">
+              <span class="early-emoji">🎉</span>
+              <div>
+                <strong>Erken Emeklilik Mümkün!</strong>
+                <span> Mevcut katkılarınızla <strong>{{ canRetireAt }} yaşında</strong> emekli olabilirsiniz — hedeflediğinizden {{ retirementAge - canRetireAt }} yıl erken.</span>
+              </div>
+            </div>
+          }
+
+          <!-- Chart -->
+          <div class="chart-card">
+            <h3 class="chart-title">Birikim Büyümesi</h3>
+            <apx-chart
+              [series]="series"
+              [chart]="chart"
+              [xaxis]="xaxis"
+              [yaxis]="yaxis"
+              [stroke]="stroke"
+              [fill]="fill"
+              [grid]="grid"
+              [tooltip]="tooltip"
+              [annotations]="annotations"
+              [colors]="colors">
+            </apx-chart>
+          </div>
+
+          <!-- Timeline table -->
+          <div class="timeline-card">
+            <h3 class="tl-title">Yıllık Projeksiyon</h3>
+            <div class="tl-table">
+              <div class="tl-head">
+                <span>Yaş</span>
+                <span>Birikim</span>
+                <span>Toplam Katkı</span>
+                <span>Büyüme</span>
+              </div>
+              @for (row of timeline; track row.age) {
+                <div class="tl-row" [class.retirement-row]="row.age === retirementAge">
+                  <span class="tl-age">
+                    {{ row.age }}
+                    @if (row.age === retirementAge) { <span class="tl-tag">EMEKLİLİK</span> }
+                    @if (row.age === canRetireAt) { <span class="tl-tag green">ERKEN</span> }
+                  </span>
+                  <span class="tl-balance">{{ fmt(row.balance) }}</span>
+                  <span class="tl-contrib">{{ fmt(row.contrib) }}</span>
+                  <span class="tl-growth" [style.color]="'#4ade80'">+{{ fmt(row.growth) }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+        }
+      </div>
+    </div>
+  </div>
+</div>

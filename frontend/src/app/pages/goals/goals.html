@@ -1,0 +1,159 @@
+<div class="goals-shell">
+  <app-sidebar></app-sidebar>
+
+  <div class="goals-content">
+
+    <header class="goals-header">
+      <div>
+        <h1 class="goals-title">Hedefler</h1>
+        <p class="goals-sub">Finansal hedeflerinizi takip edin</p>
+      </div>
+      <button class="btn-add" (click)="openAdd()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 4v16m8-8H4" stroke-linecap="round"/>
+        </svg>
+        Hedef Ekle
+      </button>
+    </header>
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <span>Yükleniyor...</span>
+      </div>
+    } @else if (goals.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Henüz hedef eklenmemiş</h3>
+        <p>İlk finansal hedefinizi ekleyerek başlayın.</p>
+        <button class="btn-add" (click)="openAdd()">Hedef Ekle</button>
+      </div>
+    } @else {
+      <div class="goals-grid">
+        @for (goal of goals; track goal.id) {
+          <div class="goal-card" [class.deleting]="deletingId === goal.id">
+
+            <div class="goal-top">
+              <div class="goal-title-wrap">
+                <span class="goal-title">{{ goal.title }}</span>
+                @if (goal.deadline) {
+                  <span class="goal-deadline" [class.urgent]="daysLeft(goal.deadline) <= 30 && daysLeft(goal.deadline) >= 0">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    {{ daysLeft(goal.deadline) >= 0 ? daysLeft(goal.deadline) + ' gün kaldı' : 'Süre doldu' }}
+                  </span>
+                }
+              </div>
+              <div class="goal-actions">
+                <button class="icon-btn edit" (click)="openEdit(goal)" title="Düzenle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="icon-btn delete" (click)="confirmDelete(goal.id)" title="Sil">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="goal-amounts">
+              <span class="current">₺{{ goal.currentAmount | number:'1.0-0' }}</span>
+              <span class="separator">/</span>
+              <span class="target">₺{{ goal.targetAmount | number:'1.0-0' }}</span>
+            </div>
+
+            <div class="goal-progress-wrap">
+              <div class="goal-bar">
+                <div class="goal-fill"
+                  [style.width.%]="progress(goal)"
+                  [style.background]="progressColor(progress(goal))">
+                </div>
+              </div>
+              <span class="goal-pct" [style.color]="progressColor(progress(goal))">
+                %{{ progress(goal) }}
+              </span>
+            </div>
+
+            @if (deletingId === goal.id) {
+              <div class="delete-confirm">
+                <span>Silmek istediğinize emin misiniz?</span>
+                <div class="confirm-btns">
+                  <button class="btn-cancel" (click)="cancelDelete()">İptal</button>
+                  <button class="btn-delete" (click)="doDelete(goal.id)">Sil</button>
+                </div>
+              </div>
+            }
+
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>
+
+<!-- Modal -->
+@if (showForm) {
+  <div class="modal-overlay" (click)="closeForm()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-head">
+        <h2>{{ editingGoal ? 'Hedefi Düzenle' : 'Yeni Hedef' }}</h2>
+        <button class="modal-close" (click)="closeForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-form">
+
+        <div class="field-group">
+          <label>Hedef Adı <span class="req">*</span></label>
+          <input type="text" formControlName="title" placeholder="örn. Araba, Tatil, Acil Fon"/>
+          @if (field('title').invalid && field('title').touched) {
+            <span class="field-error">Hedef adı zorunlu</span>
+          }
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label>Hedef Tutar <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="prefix">₺</span>
+              <input type="number" formControlName="targetAmount" min="1" placeholder="0"/>
+            </div>
+            @if (field('targetAmount').invalid && field('targetAmount').touched) {
+              <span class="field-error">Geçerli bir tutar girin</span>
+            }
+          </div>
+          <div class="field-group">
+            <label>Mevcut Birikim</label>
+            <div class="input-wrap">
+              <span class="prefix">₺</span>
+              <input type="number" formControlName="currentAmount" min="0" placeholder="0"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Son Tarih</label>
+          <input type="date" formControlName="deadline"/>
+          <span class="field-hint">İsteğe bağlı</span>
+        </div>
+
+        @if (errorMsg) {
+          <div class="alert-error">{{ errorMsg }}</div>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel-modal" (click)="closeForm()">İptal</button>
+          <button type="submit" class="btn-save" [disabled]="isSaving">
+            @if (isSaving) { <div class="btn-spin"></div> }
+            {{ editingGoal ? 'Güncelle' : 'Kaydet' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}

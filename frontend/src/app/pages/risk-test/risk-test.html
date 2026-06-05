@@ -1,0 +1,277 @@
+<div class="rt-shell">
+  <app-sidebar></app-sidebar>
+
+  <div class="rt-content">
+
+    <!-- ══════════════ INTRO ══════════════ -->
+    @if (screen === 'intro') {
+      <div class="intro-wrap">
+
+        <!-- Animated bg orbs -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+
+        <!-- Hero -->
+        <div class="intro-hero">
+          <div class="hero-badge">
+            <span class="badge-dot-anim"></span>
+            Yapay Zeka Destekli Risk Analizi
+          </div>
+          <h1 class="hero-title">
+            Finansal Risk<br/>
+            <span class="gradient-text">Profilinizi Keşfedin</span>
+          </h1>
+          <p class="hero-desc">
+            10 soruluk bu test, yatırım davranışlarınızı ve finansal toleransınızı analiz ederek
+            size özel risk profilinizi belirler.
+          </p>
+        </div>
+
+        <!-- ML Feature Cards -->
+        <div class="feature-grid">
+          <div class="feature-card ml-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Makine Öğrenmesi Modeli</span>
+              <span class="feature-val highlight-val">9.000+ Veri</span>
+              <span class="feature-sub">ile eğitildi</span>
+            </div>
+            <div class="ml-badge">ML</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon acc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Doğruluk Oranı</span>
+              <span class="feature-val">%94.2</span>
+              <span class="feature-sub">test başarımı</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon time-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Tamamlanma Süresi</span>
+              <span class="feature-val">~3 dk</span>
+              <span class="feature-sub">10 soru</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon profile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M16 8v8m-8-5v5m4-9v9M3 20h18" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Finansal Verileriniz</span>
+              <span class="feature-val">Dahil Edilir</span>
+              <span class="feature-sub">kişiselleştirilmiş</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- How it works -->
+        <div class="how-card">
+          <h3 class="how-title">Nasıl Çalışır?</h3>
+          <div class="how-steps">
+            <div class="how-step">
+              <div class="step-num">1</div>
+              <div class="step-text">
+                <strong>10 soru</strong> yanıtlayın — yatırım tercihleri, risk toleransı ve finansal hedefler
+              </div>
+            </div>
+            <div class="step-line"></div>
+            <div class="how-step">
+              <div class="step-num">2</div>
+              <div class="step-text">
+                <strong>ML modeli</strong> cevaplarınızı ve finansal profilinizi birlikte analiz eder
+              </div>
+            </div>
+            <div class="step-line"></div>
+            <div class="how-step">
+              <div class="step-num">3</div>
+              <div class="step-text">
+                <strong>Risk profiliniz</strong> belirlenir ve size özel yatırım stratejisi önerilir
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Previous result -->
+        @if (prevResult) {
+          <div class="prev-result-card">
+            <div class="prev-left">
+              <span class="prev-label">Son Test Sonucunuz</span>
+              <span class="prev-level" [style.color]="riskColor(prevResult.riskLevel)">
+                {{ riskEmoji(prevResult.riskLevel) }} {{ riskLabel(prevResult.riskLevel) }}
+              </span>
+              <span class="prev-date">{{ formatDate(prevResult.completedAt) }}</span>
+            </div>
+            <div class="prev-score">
+              <span class="score-num">{{ prevResult.totalScore }}</span>
+              <span class="score-label">puan</span>
+            </div>
+          </div>
+        }
+
+        <!-- CTA -->
+        @if (loading) {
+          <div class="cta-loading">
+            <div class="spinner"></div>
+            <span>Sorular yükleniyor...</span>
+          </div>
+        } @else {
+          <button class="btn-start" (click)="startTest()">
+            <span>{{ prevResult ? 'Testi Yeniden Yap' : 'Teste Başla' }}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        }
+
+      </div>
+    }
+
+    <!-- ══════════════ QUIZ ══════════════ -->
+    @if (screen === 'quiz' && questions.length > 0) {
+      <div class="quiz-wrap">
+
+        <!-- Progress -->
+        <div class="quiz-progress-area">
+          <button class="back-btn" (click)="goBack()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M11 17l-5-5m0 0l5-5m-5 5h12" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="progress-info">
+            <span class="progress-text">{{ currentIdx + 1 }} / {{ questions.length }}</span>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" [style.width.%]="((currentIdx + 1) / questions.length) * 100"></div>
+            </div>
+          </div>
+          <span class="progress-pct">%{{ Math.round(((currentIdx + 1) / questions.length) * 100) }}</span>
+        </div>
+
+        <!-- Question -->
+        <div class="question-card">
+          <div class="q-number">Soru {{ currentIdx + 1 }}</div>
+          <h2 class="q-text">{{ currentQuestion.questionTextTr }}</h2>
+        </div>
+
+        <!-- Options -->
+        <div class="options-list">
+          @for (opt of currentQuestion.options; track opt.id) {
+            <button
+              class="option-btn"
+              [class.selected]="selectedOptionId === opt.id"
+              [class.dimmed]="selectedOptionId !== null && selectedOptionId !== opt.id"
+              (click)="selectOption(opt.id)"
+              [disabled]="selectedOptionId !== null">
+              <span class="opt-text">{{ opt.optionTextTr }}</span>
+              @if (selectedOptionId === opt.id) {
+                <svg class="opt-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              }
+            </button>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- ══════════════ RESULT ══════════════ -->
+    @if (screen === 'result') {
+      <div class="result-wrap">
+
+        @if (submitting) {
+          <div class="analyzing-state">
+            <div class="analyzing-ring">
+              <div class="ring ring-1"></div>
+              <div class="ring ring-2"></div>
+              <div class="ring ring-3"></div>
+              <div class="brain-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <h3>Yapay Zeka Analiz Ediyor</h3>
+            <p>ML modelimiz cevaplarınızı ve finansal profilinizi işliyor...</p>
+          </div>
+        } @else if (result) {
+
+          <div class="result-orb result-orb-1" [style.background]="riskColor(result.riskLevel)"></div>
+          <div class="result-orb result-orb-2" [style.background]="riskColor(result.mlRiskLevel ?? result.riskLevel)"></div>
+
+          <div class="result-hero">
+            <div class="result-emoji">{{ riskEmoji(result.riskLevel) }}</div>
+            <h1 class="result-level" [style.color]="riskColor(result.riskLevel)">
+              {{ riskLabel(result.riskLevel) }}
+            </h1>
+            <p class="result-desc">{{ riskDesc(result.riskLevel) }}</p>
+          </div>
+
+          <div class="result-cards">
+
+            <div class="result-card score-card">
+              <span class="rc-label">Toplam Puan</span>
+              <span class="rc-big">{{ result.totalScore }}</span>
+              <span class="rc-sub">/ 40 üzerinden</span>
+            </div>
+
+            <div class="result-card algo-card">
+              <div class="algo-head">
+                <span class="rc-label">Kural Tabanlı</span>
+                <span class="tag-algo">Klasik</span>
+              </div>
+              <span class="rc-level" [style.color]="riskColor(result.riskLevel)">
+                {{ riskLabel(result.riskLevel) }}
+              </span>
+            </div>
+
+            @if (result.mlRiskLevel) {
+              <div class="result-card ml-result-card">
+                <div class="algo-head">
+                  <span class="rc-label">ML Modeli Tahmini</span>
+                  <span class="tag-ml">AI</span>
+                </div>
+                <span class="rc-level" [style.color]="riskColor(result.mlRiskLevel)">
+                  {{ riskLabel(result.mlRiskLevel) }}
+                </span>
+                <span class="ml-note">9.000+ veri ile eğitilmiş model</span>
+              </div>
+            }
+
+          </div>
+
+          <div class="result-actions">
+            <button class="btn-retake" (click)="retakeTest()">Testi Tekrarla</button>
+            <button class="btn-dashboard" (click)="router.navigate(['/dashboard'])">
+              Dashboard'a Dön
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+        }
+      </div>
+    }
+
+  </div>
+</div>

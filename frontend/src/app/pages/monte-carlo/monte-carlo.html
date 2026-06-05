@@ -1,0 +1,194 @@
+<div class="mc-shell">
+  <app-sidebar></app-sidebar>
+  <div class="mc-content">
+
+    <div class="page-header">
+      <div>
+        <div class="page-badge">
+          <span class="badge-dot"></span>
+          Monte Carlo Simülasyonu
+        </div>
+        <h1 class="page-title">Hedefe Ulaşma Olasılığı</h1>
+        <p class="page-sub">{{ trials.toLocaleString('tr-TR') }} farklı senaryo simüle edilerek başarı ihtimaliniz hesaplanır</p>
+      </div>
+    </div>
+
+    <div class="layout">
+
+      <!-- Inputs -->
+      <div class="inputs-card">
+        <h3 class="card-title">Parametreler</h3>
+
+        <div class="field-group">
+          <label>Hedef Tutar</label>
+          <div class="input-wrap">
+            <span class="prefix">₺</span>
+            <input type="number" [(ngModel)]="targetAmount"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Mevcut Birikim</label>
+          <div class="input-wrap">
+            <span class="prefix">₺</span>
+            <input type="number" [(ngModel)]="currentSavings"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Aylık Katkı</label>
+          <div class="input-wrap">
+            <span class="prefix">₺</span>
+            <input type="number" [(ngModel)]="monthlyContrib"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Süre (Yıl)</label>
+          <div class="input-wrap">
+            <span class="prefix">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+            </span>
+            <input type="number" [(ngModel)]="years" min="1" max="40"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Beklenen Yıllık Getiri</label>
+          <div class="input-wrap">
+            <span class="prefix">%</span>
+            <input type="number" [(ngModel)]="annualReturn" step="0.5"/>
+          </div>
+          <span class="field-hint">Türkiye için tarihsel ortalama ~%15–20</span>
+        </div>
+
+        <div class="field-group">
+          <label>Yıllık Volatilite (Risk)</label>
+          <div class="input-wrap">
+            <span class="prefix">%</span>
+            <input type="number" [(ngModel)]="volatility" step="1"/>
+          </div>
+          <span class="field-hint">Getirinin standart sapması</span>
+        </div>
+
+        <button class="btn-run" (click)="run()" [disabled]="running">
+          @if (running) { <span class="btn-spin"></span> }
+          @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" stroke-linecap="round"/>
+              <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"/>
+            </svg>
+          }
+          {{ running ? 'Simüle ediliyor...' : 'Simülasyonu Çalıştır' }}
+        </button>
+
+        <div class="method-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"/>
+          </svg>
+          <span>Box-Muller dönüşümü ile Log-normal getiri modeli kullanılır</span>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="results-col">
+
+        @if (!hasResult) {
+          <div class="empty-result">
+            <div class="empty-graphic">
+              <div class="eg-ring r1"></div>
+              <div class="eg-ring r2"></div>
+              <div class="eg-ring r3"></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p>Parametreleri girin ve simülasyonu başlatın</p>
+          </div>
+        }
+
+        @if (hasResult) {
+
+          <!-- Success rate big card -->
+          <div class="success-card" [style.border-color]="successColor + '40'">
+            <div class="success-bg" [style.background]="successColor + '08'"></div>
+            <div class="success-content">
+              <span class="success-label">Başarı Olasılığı</span>
+              <span class="success-pct" [style.color]="successColor">
+                %{{ successRate!.toFixed(1) }}
+              </span>
+              <span class="success-sub" [style.color]="successColor">{{ successLabel }}</span>
+            </div>
+            <div class="success-ring">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8"/>
+                <circle cx="50" cy="50" r="40" fill="none"
+                  [attr.stroke]="successColor"
+                  stroke-width="8"
+                  stroke-linecap="round"
+                  [attr.stroke-dasharray]="251.3"
+                  [attr.stroke-dashoffset]="251.3 * (1 - successRate! / 100)"
+                  transform="rotate(-90 50 50)"
+                  style="transition: stroke-dashoffset 1s ease"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Scenario cards -->
+          <div class="scenario-row">
+            <div class="scenario-card pessimist">
+              <span class="sc-label">Kötümser (%10)</span>
+              <span class="sc-val">{{ fmt(p10Final) }}</span>
+            </div>
+            <div class="scenario-card median">
+              <span class="sc-label">Medyan (%50)</span>
+              <span class="sc-val">{{ fmt(medianFinal) }}</span>
+            </div>
+            <div class="scenario-card optimist">
+              <span class="sc-label">İyimser (%90)</span>
+              <span class="sc-val">{{ fmt(p90Final) }}</span>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="chart-card">
+            <div class="chart-head">
+              <h3 class="chart-title">Simülasyon Yelpazesi</h3>
+              <div class="chart-legend">
+                <span class="leg-item"><span class="leg-dot" style="background:#4ade80"></span>Medyan</span>
+                <span class="leg-item"><span class="leg-dot" style="background:#a78bfa;opacity:.4"></span>P25–P75</span>
+                <span class="leg-item"><span class="leg-dot" style="background:#fbbf24"></span>Hedef</span>
+              </div>
+            </div>
+            <apx-chart
+              [series]="series"
+              [chart]="chart"
+              [xaxis]="xaxis"
+              [yaxis]="yaxis"
+              [stroke]="stroke"
+              [fill]="fill"
+              [grid]="grid"
+              [tooltip]="tooltip"
+              [annotations]="annotations"
+              [colors]="colors">
+            </apx-chart>
+          </div>
+
+          <!-- Interpretation -->
+          <div class="interp-card">
+            <h3 class="interp-title">Yorumlama</h3>
+            <p>
+              {{ trials.toLocaleString('tr-TR') }} farklı piyasa senaryosunda:
+              <strong [style.color]="successColor">%{{ successRate!.toFixed(0) }}</strong> olasılıkla
+              {{ years }} yıl içinde <strong>{{ fmt(targetAmount) }}</strong> hedefinize ulaşabilirsiniz.
+              En kötü %10 senaryoda <strong>{{ fmt(p10Final) }}</strong>, en iyi %10 senaryoda
+              <strong [style.color]="'#4ade80'">{{ fmt(p90Final) }}</strong> birikim öngörülmektedir.
+            </p>
+          </div>
+
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

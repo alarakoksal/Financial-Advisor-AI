@@ -1,0 +1,22 @@
+{
+  "landing": {
+    "login": "Login",
+    "register": "Sign Up",
+    "hero": {
+      "title": "Let's shape your financial future together",
+      "subtitle": "Analyze your income, expenses and goals. Get AI-powered personalized financial advice.",
+      "cta": "Get Started"
+    },
+    "features": {
+      "title": "What we offer"
+    },
+    "feature1": "Analyze your financial situation in detail",
+    "feature2": "Get AI-powered personalized recommendations",
+    "feature3": "Set and track your financial goals",
+    "feature4": "Stay aware with smart financial notifications",
+    "cta": {
+      "title": "Take the first step towards financial freedom",
+      "button": "Sign Up for Free"
+    }
+  }
+}

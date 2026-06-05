@@ -1,0 +1,251 @@
+<div class="adv-shell">
+  <app-sidebar></app-sidebar>
+
+  <div class="adv-content">
+
+    <!-- ══════════ INTRO ══════════ -->
+    @if (screen === 'intro') {
+      <div class="intro-wrap">
+
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+
+        <!-- Hero -->
+        <div class="intro-hero">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            GPT-4 Destekli Finansal Analiz
+          </div>
+          <h1 class="hero-title">
+            Yapay Zeka<br/>
+            <span class="gradient-text">Finansal Danışmanınız</span>
+          </h1>
+          <p class="hero-desc">
+            Gelir, gider, birikim, borç ve hedefleriniz analiz edilerek size özel,
+            derinlemesine bir finansal öneri raporu oluşturulur.
+          </p>
+        </div>
+
+        <!-- Feature cards -->
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon icon-ai">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Model</span>
+              <span class="feature-val">GPT-3.5 Turbo</span>
+              <span class="feature-sub">OpenAI tarafından</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon icon-person">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Kişiselleştirme</span>
+              <span class="feature-val">Tam Profil</span>
+              <span class="feature-sub">risk + hedefler dahil</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon icon-report">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Çıktı</span>
+              <span class="feature-val">Detaylı Rapor</span>
+              <span class="feature-sub">bölümlü analiz</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon icon-history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <span class="feature-label">Geçmiş</span>
+              <span class="feature-val">{{ history.length }} Öneri</span>
+              <span class="feature-sub">kayıtlı rapor</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- What it covers -->
+        <div class="covers-card">
+          <h3 class="covers-title">Raporda Neler Yer Alır?</h3>
+          <div class="covers-grid">
+            <div class="cover-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round"/>
+              </svg>
+              <span>Bütçe Analizi</span>
+            </div>
+            <div class="cover-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"/>
+              </svg>
+              <span>Tasarruf Önerileri</span>
+            </div>
+            <div class="cover-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round"/>
+              </svg>
+              <span>Risk Değerlendirmesi</span>
+            </div>
+            <div class="cover-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" stroke-linecap="round"/>
+              </svg>
+              <span>Hedef Planlaması</span>
+            </div>
+            <div class="cover-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" stroke-linecap="round"/>
+              </svg>
+              <span>Borç Yönetimi</span>
+            </div>
+            <div class="cover-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round"/>
+              </svg>
+              <span>Finansal Güvenlik</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Previous advice history -->
+        @if (!historyLoading && history.length > 0) {
+          <div class="history-preview">
+            <h3 class="history-title">Önceki Raporlarınız</h3>
+            <div class="history-list">
+              @for (item of history; track item.id) {
+                <button class="history-item" (click)="showHistory(item)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="hi-date">{{ formatDate(item.createdAt) }}</span>
+                  <span class="hi-preview">{{ item.content.slice(0, 60) }}...</span>
+                  <svg class="hi-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        @if (error) {
+          <div class="alert-error">{{ error }}</div>
+        }
+
+        <button class="btn-generate" (click)="generate()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>{{ history.length > 0 ? 'Yeni Öneri Oluştur' : 'Öneri Oluştur' }}</span>
+        </button>
+
+      </div>
+    }
+
+    <!-- ══════════ GENERATING ══════════ -->
+    @if (screen === 'generating') {
+      <div class="generating-wrap">
+        <div class="gen-rings">
+          <div class="gen-ring r1"></div>
+          <div class="gen-ring r2"></div>
+          <div class="gen-ring r3"></div>
+          <div class="gen-center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <h2>Yapay Zeka Analiz Ediyor</h2>
+        <p>Finansal profiliniz, risk düzeyiniz ve hedefleriniz işleniyor...</p>
+        <div class="gen-steps">
+          <div class="gen-step active">
+            <div class="gs-dot"></div>
+            <span>Finansal veriler okunuyor</span>
+          </div>
+          <div class="gen-step active">
+            <div class="gs-dot"></div>
+            <span>Risk profili analiz ediliyor</span>
+          </div>
+          <div class="gen-step">
+            <div class="gs-dot pulse"></div>
+            <span>Kişiselleştirilmiş rapor hazırlanıyor...</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════ RESULT ══════════ -->
+    @if (screen === 'result' && advice) {
+      <div class="result-wrap">
+
+        <!-- Header -->
+        <div class="result-header">
+          <div class="result-header-left">
+            <button class="back-btn" (click)="backToIntro()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M11 17l-5-5m0 0l5-5m-5 5h12" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div>
+              <h2 class="result-title">Finansal Öneri Raporu</h2>
+              <p class="result-sub">Yapay zeka tarafından oluşturuldu</p>
+            </div>
+          </div>
+          <button class="btn-regenerate" (click)="generate()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Yenile
+          </button>
+        </div>
+
+        <!-- AI badge -->
+        <div class="ai-badge-row">
+          <div class="ai-badge">
+            <span class="ai-dot"></span>
+            GPT-3.5 Turbo ile Oluşturuldu
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="advice-body" [innerHTML]="renderedAdvice"></div>
+
+        <!-- History sidebar -->
+        @if (history.length > 1) {
+          <div class="history-section">
+            <h3 class="hs-title">Geçmiş Raporlar</h3>
+            <div class="hs-list">
+              @for (item of history; track item.id) {
+                <button class="hs-item" (click)="showHistory(item)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>{{ formatDate(item.createdAt) }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+      </div>
+    }
+
+  </div>
+</div>

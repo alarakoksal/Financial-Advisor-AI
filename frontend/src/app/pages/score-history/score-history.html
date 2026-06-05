@@ -1,0 +1,122 @@
+<div class="sh-shell">
+  <app-sidebar></app-sidebar>
+
+  <div class="sh-content">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Finansal Skor Geçmişi</h1>
+        <p class="page-sub">Finansal sağlık skorunuzun zaman içindeki değişimi</p>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <span>Yükleniyor...</span>
+      </div>
+    } @else if (history.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Henüz veri yok</h3>
+        <p>Dashboard'u ziyaret ettiğinizde skor otomatik olarak kaydedilir. <br/>Birkaç gün sonra grafik burada görünecek.</p>
+      </div>
+    } @else {
+
+      <!-- Summary cards -->
+      <div class="summary-row">
+        <div class="summary-card">
+          <span class="sc-label">Güncel Skor</span>
+          <span class="sc-big" [style.color]="scoreColor(currentScore)">{{ currentScore }}</span>
+          <span class="sc-sub" [style.color]="scoreColor(currentScore)">{{ scoreLabel(currentScore) }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="sc-label">Değişim</span>
+          <div class="change-wrap">
+            @if (change > 0) {
+              <svg class="change-icon up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="sc-big green">+{{ change }}</span>
+            } @else if (change < 0) {
+              <svg class="change-icon down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M13 17l5-5m0 0l-5-5m5 5H6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="sc-big red">{{ change }}</span>
+            } @else {
+              <span class="sc-big muted">—</span>
+            }
+          </div>
+          <span class="sc-sub">ilk kayıttan bu yana</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="sc-label">Ortalama</span>
+          <span class="sc-big" [style.color]="scoreColor(avgScore)">{{ avgScore }}</span>
+          <span class="sc-sub">{{ history.length }} kayıt ortalaması</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="sc-label">En Yüksek</span>
+          <span class="sc-big green">{{ maxScore }}</span>
+          <span class="sc-sub">tüm zamanlar</span>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <h3 class="chart-title">Skor Trendi</h3>
+          <div class="score-badge" [style.background]="scoreColor(currentScore) + '20'" [style.border-color]="scoreColor(currentScore) + '40'">
+            <span [style.color]="scoreColor(currentScore)">{{ scoreLabel(currentScore) }}</span>
+          </div>
+        </div>
+
+        <!-- Zone bands -->
+        <div class="zone-legend">
+          <div class="zone-item"><span class="zone-dot good"></span>İyi (70-100)</div>
+          <div class="zone-item"><span class="zone-dot mid"></span>Orta (40-69)</div>
+          <div class="zone-item"><span class="zone-dot bad"></span>Riskli (0-39)</div>
+        </div>
+
+        <apx-chart
+          [series]="series"
+          [chart]="chart"
+          [xaxis]="xaxis"
+          [yaxis]="yaxis"
+          [stroke]="stroke"
+          [markers]="markers"
+          [fill]="fill"
+          [grid]="grid"
+          [tooltip]="tooltip"
+          [colors]="colors">
+        </apx-chart>
+      </div>
+
+      <!-- History table -->
+      <div class="history-card">
+        <h3 class="history-title">Geçmiş Kayıtlar</h3>
+        <div class="history-table">
+          <div class="ht-head">
+            <span>Tarih</span>
+            <span>Skor</span>
+            <span>Durum</span>
+          </div>
+          @for (item of history | slice: 0 : 20; track item.recordedAt) {
+            <div class="ht-row">
+              <span class="ht-date">{{ formatDate(item.recordedAt) }}</span>
+              <span class="ht-score" [style.color]="scoreColor(item.score)">{{ item.score }} / 100</span>
+              <span class="ht-label" [style.color]="scoreColor(item.score)">{{ scoreLabel(item.score) }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+    }
+  </div>
+</div>

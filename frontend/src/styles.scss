@@ -1,0 +1,107 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+@import "tailwindcss";
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+  height: 100%;
+}
+/* You can add global styles to this file, and also import other style files */
+
+/* ─── Light Mode Global Overrides ─────────────────────────────────── */
+body.light {
+  /* Dim/gray theme — darker than white, lighter than #05091a, white text stays readable */
+
+  /* Page shells */
+  .dashboard-shell, .fp-shell, .adv-shell, .db-shell,
+  .sh-shell, .mc-shell, .rt-shell, .ds-shell, .st-shell {
+    background: #2e3548 !important;
+  }
+
+  /* Content text */
+  .dashboard-content, .fp-content, .adv-content, .db-content,
+  .sh-content, .mc-content, .rt-content, .ds-content, .st-content {
+    color: #e2e8f0 !important;
+  }
+
+  /* Cards / glass cards — slightly lighter than shell */
+  .glass-card, .metric-card, .method-card, .compare-card,
+  .chart-card, .debts-card, .winner-banner, .tips-card,
+  .danger-card, .info-grid, .pref-group, .settings-nav,
+  .settings-panel, .avatar-card, .panel-section,
+  .summary-cards > *, .kpi-row > *, .param-card, .result-card,
+  .left-col > *, .right-col > .chart-card,
+  .notif-item, .debt-row, .history-row,
+  .adv-history-item {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.12) !important;
+  }
+
+  /* Inputs */
+  input[type="text"], input[type="email"], input[type="password"],
+  input[type="number"], input[type="date"], select, textarea {
+    background: rgba(255,255,255,0.07) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+    color: #e2e8f0 !important;
+    &::placeholder { color: #64748b !important; }
+  }
+
+  .input-wrap, .input-icon-wrap {
+    background: rgba(255,255,255,0.07) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+    .prefix { border-color: rgba(255,255,255,0.1) !important; }
+    input { color: #e2e8f0 !important; }
+  }
+
+  /* Nav buttons in settings */
+  .nav-btn {
+    &:hover { background: rgba(255,255,255,0.06) !important; }
+  }
+
+  /* Language cards */
+  .lang-card {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    &.selected { background: rgba(99,102,241,0.15) !important; border-color: rgba(99,102,241,0.35) !important; }
+  }
+
+  /* Delete confirm input */
+  .delete-confirm-input {
+    background: rgba(255,255,255,0.07) !important;
+    color: #e2e8f0 !important;
+  }
+
+  /* Sidebar stays dark intentionally */
+}

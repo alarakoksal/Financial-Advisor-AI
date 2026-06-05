@@ -1,0 +1,234 @@
+<div class="landing">
+
+  <!-- Particle Canvas -->
+  <canvas #canvas class="particle-canvas"></canvas>
+
+  <!-- Dekoratif Işık Orbs -->
+  <div class="orb orb-top-right"></div>
+  <div class="orb orb-bottom-left"></div>
+  <div class="orb orb-center"></div>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">VESTLY<em>.ai</em></span>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#features">Özellikler</a></li>
+        <li><a href="#how">Nasıl Çalışır</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a routerLink="/auth/login" class="btn-ghost">Giriş Yap</a>
+        <a routerLink="/auth/register" class="btn-nav-cta">Kaydol</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="eyebrow">
+          <span class="dot-pulse"></span>
+          Yapay Zeka Destekli Finansal Danışman
+        </div>
+
+        <h1 class="hero-title">
+          Paranızı <br>
+          <span class="shine-text">Akıllı Veriyle</span><br>
+          Büyütün
+        </h1>
+
+        <p class="hero-sub">
+          Makine öğrenmesi ve GPT entegrasyonu ile finansal durumunuzu analiz edin,
+          kişiselleştirilmiş yol haritanızı keşfedin.
+        </p>
+
+        <div class="hero-cta">
+          <a routerLink="/auth/register" class="btn-primary">
+            <span>Hemen Başlayın</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#features" class="btn-secondary">Sistemi Keşfet</a>
+        </div>
+
+        <div class="trust-bar">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Banka düzeyi şifreleme</span>
+          </div>
+          <div class="trust-sep"></div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Anlık AI analizi</span>
+          </div>
+          <div class="trust-sep"></div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+            <span>7/24 aktif izleme</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sağ: Dashboard Mockup Kartı -->
+      <div class="hero-visual">
+        <div class="mockup-card">
+          <div class="mockup-header">
+            <div class="mockup-dot red"></div>
+            <div class="mockup-dot yellow"></div>
+            <div class="mockup-dot green"></div>
+            <span class="mockup-title">Finansal Özet</span>
+          </div>
+
+          <div class="mockup-body">
+            <div class="mockup-stat-row">
+              <div class="mockup-stat">
+                <span class="mstat-label">Aylık Gelir</span>
+                <span class="mstat-value green-text">₺24,500</span>
+              </div>
+              <div class="mockup-stat">
+                <span class="mstat-label">Harcama</span>
+                <span class="mstat-value red-text">₺14,200</span>
+              </div>
+            </div>
+
+            <div class="mockup-chart">
+              <div class="chart-bar" style="--h:55%; --delay:0s"></div>
+              <div class="chart-bar" style="--h:75%; --delay:0.1s"></div>
+              <div class="chart-bar" style="--h:45%; --delay:0.2s"></div>
+              <div class="chart-bar" style="--h:90%; --delay:0.3s"></div>
+              <div class="chart-bar" style="--h:65%; --delay:0.4s"></div>
+              <div class="chart-bar" style="--h:80%; --delay:0.5s"></div>
+              <div class="chart-bar" style="--h:70%; --delay:0.6s"></div>
+            </div>
+
+            <div class="mockup-ai-box">
+              <div class="ai-icon">✦</div>
+              <div class="ai-text">
+                <strong>AI Önerisi</strong>
+                <span>Tasarruf oranınız %42. Hedef fona 3 ayda ulaşabilirsiniz.</span>
+              </div>
+            </div>
+
+            <div class="mockup-risk-row">
+              <span class="risk-label">Risk Profili</span>
+              <span class="risk-badge moderate">Orta Risk</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yüzen küçük kartlar -->
+        <div class="float-card float-card-1">
+          <span class="float-icon">↑</span>
+          <div>
+            <strong>+%18.4</strong>
+            <span>Net Büyüme</span>
+          </div>
+        </div>
+        <div class="float-card float-card-2">
+          <span class="float-icon">◎</span>
+          <div>
+            <strong>Güvenli</strong>
+            <span>Sistem Durumu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+  <section id="how" class="how-section">
+    <div class="section-inner">
+      <div class="section-label">Nasıl Çalışır?</div>
+      <h2 class="section-title">Üç Adımda <span class="shine-text">Finansal Özgürlük</span></h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-line"></div>
+          <div class="step-content">
+            <h3>Profilinizi Oluşturun</h3>
+            <p>Gelir, gider ve finansal hedeflerinizi girin. Sistem anında çalışmaya başlar.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-line"></div>
+          <div class="step-content">
+            <h3>AI Analiz Eder</h3>
+            <p>ML algoritması risk profilinizi belirler, GPT modelimiz kişisel öneriler üretir.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-line last"></div>
+          <div class="step-content">
+            <h3>Hedefe Ulaşın</h3>
+            <p>Anlık bildirimler ve düzenli raporlarla finansal hedeflerinizi gerçeğe dönüştürün.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FEATURES ═══════════════ -->
+  <section id="features" class="features-section">
+    <div class="section-inner">
+      <div class="section-label">Özellikler</div>
+      <h2 class="section-title">Her Şey <span class="shine-text">Tek Platformda</span></h2>
+
+      <div class="features-grid">
+        @for (f of features; track f.title) {
+          <div class="feature-card">
+            <div class="feature-icon">{{ f.icon }}</div>
+            <h3>{{ f.title }}</h3>
+            <p>{{ f.desc }}</p>
+            <div class="feature-glow"></div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ CTA ═══════════════ -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <div class="cta-glow"></div>
+      <div class="section-label">Başlamaya Hazır Mısınız?</div>
+      <h2 class="cta-title">Finansal Geleceğinizi <br><span class="shine-text">Bugün Şekillendirin</span></h2>
+      <p>Hesap oluşturun, dakikalar içinde AI destekli analizinizi alın.</p>
+      <a routerLink="/auth/register" class="btn-primary large">
+        <span>Hesap Oluştur</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand">
+        <div class="brand-icon small">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">VESTLY<em>.ai</em></span>
+      </div>
+      <p>© 2026 Vestly AI. Tüm hakları saklıdır.</p>
+    </div>
+  </footer>
+
+</div>

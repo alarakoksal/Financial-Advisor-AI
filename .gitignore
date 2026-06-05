@@ -1,0 +1,15 @@
+# .NET
+**/bin/
+**/obj/
+**/*.user
+**/.vs/
+**/appsettings.json
+**/appsettings.*.json
+!**/appsettings.Example.json
+
+# Node / Angular
+**/node_modules/
+**/dist/
+
+# macOS
+.DS_Store

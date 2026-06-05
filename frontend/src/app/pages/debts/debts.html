@@ -1,0 +1,240 @@
+<div class="db-shell">
+  <app-sidebar></app-sidebar>
+
+  <div class="db-content">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Borç & Taksit Takibi</h1>
+        <p class="page-sub">Tüm borçlarınızı ve ödeme planlarınızı tek yerden yönetin</p>
+      </div>
+      <button class="btn-add" (click)="openAdd()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 4v16m8-8H4" stroke-linecap="round"/>
+        </svg>
+        Borç Ekle
+      </button>
+    </div>
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <span>Yükleniyor...</span>
+      </div>
+    } @else {
+
+      <!-- Summary cards -->
+      @if (debts.length > 0) {
+        <div class="summary-row">
+          <div class="summary-card">
+            <span class="sc-label">Toplam Kalan Borç</span>
+            <span class="sc-val red">{{ fmt(totalDebt) }} ₺</span>
+            <span class="sc-sub">{{ debts.length }} aktif borç</span>
+          </div>
+          <div class="summary-card">
+            <span class="sc-label">Aylık Ödeme Yükü</span>
+            <span class="sc-val">{{ fmt(totalMonthly) }} ₺</span>
+            <span class="sc-sub">toplam taksit</span>
+          </div>
+          <div class="summary-card">
+            <span class="sc-label">En Yakın Kapanma</span>
+            <span class="sc-val accent">{{ payoffDate(debts[0]) }}</span>
+            <span class="sc-sub">{{ debts[0].name }}</span>
+          </div>
+        </div>
+      }
+
+      <!-- Empty state -->
+      @if (debts.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Henüz borç eklenmedi</h3>
+          <p>Kredi, kart borcu veya taksit ekleyerek takibe başlayın</p>
+          <button class="btn-add" (click)="openAdd()">İlk Borcumu Ekle</button>
+        </div>
+      }
+
+      <!-- Debt list -->
+      <div class="debt-list">
+        @for (d of debts; track d.id) {
+          <div class="debt-card" [class.deleting]="deletingId === d.id">
+
+            <!-- Card top -->
+            <div class="debt-top">
+              <div class="debt-type-badge" [style.background]="typeColor(d.type) + '20'" [style.border-color]="typeColor(d.type) + '40'">
+                <span [style.color]="typeColor(d.type)">{{ typeLabel(d.type) }}</span>
+              </div>
+              <div class="debt-actions">
+                <button class="icon-btn edit" (click)="openEdit(d)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <button class="icon-btn delete" (click)="confirmDelete(d.id)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Name & amounts -->
+            <h3 class="debt-name">{{ d.name }}</h3>
+
+            <div class="debt-amounts">
+              <div class="amount-item">
+                <span class="ai-label">Kalan</span>
+                <span class="ai-val red">{{ fmt(d.remainingAmount) }} ₺</span>
+              </div>
+              <div class="amount-divider"></div>
+              <div class="amount-item">
+                <span class="ai-label">Toplam</span>
+                <span class="ai-val">{{ fmt(d.totalAmount) }} ₺</span>
+              </div>
+              <div class="amount-divider"></div>
+              <div class="amount-item">
+                <span class="ai-label">Aylık Taksit</span>
+                <span class="ai-val accent">{{ fmt(d.monthlyPayment) }} ₺</span>
+              </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="debt-progress">
+              <div class="dp-bar">
+                <div class="dp-fill" [style.width.%]="d.paidPercent" [style.background]="typeColor(d.type)"></div>
+              </div>
+              <span class="dp-pct">%{{ d.paidPercent }} ödendi</span>
+            </div>
+
+            <!-- Meta info -->
+            <div class="debt-meta">
+              <div class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/>
+                </svg>
+                <span>{{ d.remainingMonths }} ay kaldı · {{ payoffDate(d) }}</span>
+              </div>
+              @if (d.interestRate > 0) {
+                <div class="meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round"/>
+                  </svg>
+                  <span>%{{ d.interestRate }} faiz · {{ fmt(d.totalInterestCost) }} ₺ toplam faiz</span>
+                </div>
+              }
+            </div>
+
+            <!-- Delete confirm -->
+            @if (deletingId === d.id) {
+              <div class="delete-confirm">
+                <span>Bu borcu silmek istediğinizden emin misiniz?</span>
+                <div class="confirm-btns">
+                  <button class="btn-cancel" (click)="cancelDelete()">Vazgeç</button>
+                  <button class="btn-delete" (click)="doDelete(d.id)">Evet, Sil</button>
+                </div>
+              </div>
+            }
+
+          </div>
+        }
+      </div>
+
+    }
+
+    <!-- Modal -->
+    @if (showForm) {
+      <div class="modal-overlay" (click)="closeForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+          <div class="modal-head">
+            <h2>{{ editingId ? 'Borcu Düzenle' : 'Yeni Borç Ekle' }}</h2>
+            <button class="modal-close" (click)="closeForm()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="modal-form">
+
+            <div class="field-group">
+              <label>Borç Adı <span class="req">*</span></label>
+              <input type="text" [(ngModel)]="fName" placeholder="Örn: Konut Kredisi"/>
+            </div>
+
+            <div class="field-group">
+              <label>Borç Türü</label>
+              <select [(ngModel)]="fType">
+                @for (t of types; track t.value) {
+                  <option [value]="t.value">{{ t.label }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label>Toplam Tutar (₺) <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <span class="prefix">₺</span>
+                  <input type="number" [(ngModel)]="fTotalAmount" placeholder="0"/>
+                </div>
+              </div>
+              <div class="field-group">
+                <label>Kalan Tutar (₺) <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <span class="prefix">₺</span>
+                  <input type="number" [(ngModel)]="fRemainingAmount" placeholder="0"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label>Aylık Taksit (₺) <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <span class="prefix">₺</span>
+                  <input type="number" [(ngModel)]="fMonthlyPayment" placeholder="0"/>
+                </div>
+              </div>
+              <div class="field-group">
+                <label>Yıllık Faiz (%)</label>
+                <div class="input-wrap">
+                  <span class="prefix">%</span>
+                  <input type="number" [(ngModel)]="fInterestRate" placeholder="0"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label>Başlangıç Tarihi <span class="req">*</span></label>
+                <input type="date" [(ngModel)]="fStartDate"/>
+              </div>
+              <div class="field-group">
+                <label>Bitiş Tarihi</label>
+                <input type="date" [(ngModel)]="fEndDate"/>
+              </div>
+            </div>
+
+            @if (error) {
+              <div class="alert-error">{{ error }}</div>
+            }
+
+            <div class="modal-actions">
+              <button class="btn-cancel-modal" (click)="closeForm()">İptal</button>
+              <button class="btn-save" (click)="onSubmit()" [disabled]="saving">
+                @if (saving) { <span class="btn-spin"></span> }
+                {{ editingId ? 'Güncelle' : 'Ekle' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

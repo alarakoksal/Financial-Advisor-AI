@@ -1,0 +1,400 @@
+<div class="st-shell">
+  <app-sidebar></app-sidebar>
+
+  <div class="st-content">
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <span>Yükleniyor...</span>
+      </div>
+    } @else {
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Ayarlar</h1>
+          <p class="page-sub">Hesap ve uygulama ayarlarınızı yönetin</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- ── Left nav ── -->
+        <aside class="settings-nav">
+
+          <!-- Avatar card -->
+          <div class="avatar-card">
+            <div class="avatar">{{ initials }}</div>
+            <div class="avatar-info">
+              <span class="avatar-name">{{ fullName }}</span>
+              <span class="avatar-email">{{ email }}</span>
+            </div>
+          </div>
+
+          <!-- Nav items -->
+          <nav class="nav-list">
+            @for (s of sections; track s.id) {
+              <button
+                class="nav-btn"
+                [class.active]="activeSection === s.id"
+                [class.danger-btn]="s.id === 'danger'"
+                (click)="setSection(s.id)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path [attr.d]="s.icon" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {{ s.label }}
+              </button>
+            }
+          </nav>
+        </aside>
+
+        <!-- ── Right panel ── -->
+        <div class="settings-panel">
+
+          <!-- Global alerts -->
+          @if (success) {
+            <div class="alert-success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {{ success }}
+            </div>
+          }
+          @if (error) {
+            <div class="alert-error">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {{ error }}
+            </div>
+          }
+
+          <!-- ══ PROFILE ══ -->
+          @if (activeSection === 'profile') {
+            <div class="panel-section">
+              <div class="section-head">
+                <div class="section-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="section-title">Profil Bilgileri</h2>
+                  <p class="section-desc">Adınız, e-postanız ve kişisel bilgileriniz</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="field-group">
+                  <label>Ad <span class="req">*</span></label>
+                  <input type="text" [(ngModel)]="firstName" placeholder="Adınız"/>
+                </div>
+                <div class="field-group">
+                  <label>Soyad <span class="req">*</span></label>
+                  <input type="text" [(ngModel)]="lastName" placeholder="Soyadınız"/>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>E-posta Adresi <span class="req">*</span></label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <input type="email" [(ngModel)]="email" placeholder="ornek@email.com"/>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>Doğum Tarihi</label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <input type="date" [(ngModel)]="dateOfBirth"/>
+                </div>
+                <span class="field-hint">Risk analizi ve kişiselleştirilmiş öneriler için kullanılır</span>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn-save" (click)="saveProfile()" [disabled]="saving">
+                  @if (saving) { <span class="btn-spin"></span> }
+                  Değişiklikleri Kaydet
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- ══ SECURITY ══ -->
+          @if (activeSection === 'security') {
+            <div class="panel-section">
+              <div class="section-head">
+                <div class="section-icon icon-security">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="section-title">Güvenlik</h2>
+                  <p class="section-desc">Şifrenizi güncelleyin ve hesabınızı koruyun</p>
+                </div>
+              </div>
+
+              <!-- Security tips -->
+              <div class="tips-card">
+                <div class="tip">
+                  <div class="tip-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <span>En az 8 karakter, büyük harf ve rakam içersin</span>
+                </div>
+                <div class="tip">
+                  <div class="tip-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <span>Başka platformlarda kullandığınız şifreyi kullanmayın</span>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>Mevcut Şifre <span class="req">*</span></label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round"/>
+                  </svg>
+                  <input [type]="showCurrent ? 'text' : 'password'" [(ngModel)]="currentPassword" placeholder="••••••••"/>
+                  <button class="toggle-vis" (click)="showCurrent = !showCurrent" type="button">
+                    @if (showCurrent) {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    } @else {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round"/></svg>
+                    }
+                  </button>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>Yeni Şifre <span class="req">*</span></label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round"/>
+                  </svg>
+                  <input [type]="showNew ? 'text' : 'password'" [(ngModel)]="newPassword" placeholder="••••••••"/>
+                  <button class="toggle-vis" (click)="showNew = !showNew" type="button">
+                    @if (showNew) {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    } @else {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round"/></svg>
+                    }
+                  </button>
+                </div>
+
+                <!-- Strength bar -->
+                @if (newPassword) {
+                  <div class="strength-wrap">
+                    <div class="strength-bar">
+                      <div class="strength-fill"
+                        [style.width.%]="passwordStrength.width"
+                        [style.background]="passwordStrength.color">
+                      </div>
+                    </div>
+                    <span class="strength-label" [style.color]="passwordStrength.color">
+                      {{ passwordStrength.label }}
+                    </span>
+                  </div>
+                }
+              </div>
+
+              <div class="field-group">
+                <label>Yeni Şifre Tekrar <span class="req">*</span></label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round"/>
+                  </svg>
+                  <input [type]="showConfirm ? 'text' : 'password'" [(ngModel)]="confirmPassword" placeholder="••••••••"/>
+                  <button class="toggle-vis" (click)="showConfirm = !showConfirm" type="button">
+                    @if (showConfirm) {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    } @else {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round"/></svg>
+                    }
+                  </button>
+                </div>
+                @if (confirmPassword && newPassword !== confirmPassword) {
+                  <span class="field-error">Şifreler eşleşmiyor</span>
+                }
+              </div>
+
+              <div class="form-actions">
+                <button class="btn-save" (click)="savePassword()" [disabled]="saving">
+                  @if (saving) { <span class="btn-spin"></span> }
+                  Şifreyi Güncelle
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- ══ PREFERENCES ══ -->
+          @if (activeSection === 'preferences') {
+            <div class="panel-section">
+              <div class="section-head">
+                <div class="section-icon icon-pref">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="section-title">Tercihler</h2>
+                  <p class="section-desc">Dil ve yapay zeka çıktı ayarları</p>
+                </div>
+              </div>
+
+              <!-- Theme toggle -->
+              <div class="pref-group">
+                <div class="pref-label-wrap">
+                  <span class="pref-label">Tema</span>
+                  <span class="pref-desc">Arayüz renk temasını seçin</span>
+                </div>
+                <div class="theme-toggle-row">
+                  <button class="theme-btn" [class.active]="!theme.isLight" (click)="theme.isLight && theme.toggle()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Koyu
+                  </button>
+                  <button class="theme-btn" [class.active]="theme.isLight" (click)="!theme.isLight && theme.toggle()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Açık
+                  </button>
+                </div>
+              </div>
+
+              <!-- Language -->
+              <div class="pref-group">
+                <div class="pref-label-wrap">
+                  <span class="pref-label">Dil Tercihi</span>
+                  <span class="pref-desc">AI tavsiyeleri bu dilde oluşturulur</span>
+                </div>
+                <div class="lang-options">
+                  <label class="lang-card" [class.selected]="preferredLanguage === 'tr'">
+                    <input type="radio" name="lang" value="tr" [(ngModel)]="preferredLanguage"/>
+                    <span class="lang-flag">🇹🇷</span>
+                    <span class="lang-name">Türkçe</span>
+                    @if (preferredLanguage === 'tr') {
+                      <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    }
+                  </label>
+                  <label class="lang-card" [class.selected]="preferredLanguage === 'en'">
+                    <input type="radio" name="lang" value="en" [(ngModel)]="preferredLanguage"/>
+                    <span class="lang-flag">🇬🇧</span>
+                    <span class="lang-name">English</span>
+                    @if (preferredLanguage === 'en') {
+                      <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    }
+                  </label>
+                </div>
+              </div>
+
+              <!-- App info -->
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="info-label">Uygulama Versiyonu</span>
+                  <span class="info-val">v1.0.0</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">ML Servisi</span>
+                  <span class="info-val status-ok">Aktif</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">AI Model</span>
+                  <span class="info-val">GPT-3.5 Turbo</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Veri Güvenliği</span>
+                  <span class="info-val status-ok">Şifreli</span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn-save" (click)="savePreferences()" [disabled]="saving">
+                  @if (saving) { <span class="btn-spin"></span> }
+                  Tercihleri Kaydet
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- ══ DANGER ZONE ══ -->
+          @if (activeSection === 'danger') {
+            <div class="panel-section">
+              <div class="section-head">
+                <div class="section-icon icon-danger">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="section-title danger-title">Tehlike Bölgesi</h2>
+                  <p class="section-desc">Bu işlemler geri alınamaz, dikkatli olun</p>
+                </div>
+              </div>
+
+              <!-- Logout all -->
+              <div class="danger-card">
+                <div class="danger-card-text">
+                  <span class="dc-title">Oturumu Kapat</span>
+                  <span class="dc-desc">Tüm cihazlardan güvenli çıkış yapın</span>
+                </div>
+                <button class="btn-logout-all" (click)="auth.logout()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Çıkış Yap
+                </button>
+              </div>
+
+              <!-- Delete account -->
+              <div class="danger-card danger-card-red">
+                <div class="danger-card-text">
+                  <span class="dc-title dc-red">Hesabı Sil</span>
+                  <span class="dc-desc">Tüm verileriniz kalıcı olarak silinir. Bu işlem geri alınamaz.</span>
+                </div>
+                <div class="delete-confirm-wrap">
+                  <p class="delete-confirm-label">
+                    Onaylamak için aşağıya <strong>HESABIMI SİL</strong> yazın:
+                  </p>
+                  <input
+                    type="text"
+                    class="delete-confirm-input"
+                    [(ngModel)]="deleteConfirmText"
+                    placeholder="HESABIMI SİL"/>
+                  <button
+                    class="btn-delete-account"
+                    [disabled]="!canDeleteAccount || deletingAccount"
+                    (click)="deleteAccount()">
+                    @if (deletingAccount) { <span class="btn-spin"></span> }
+                    Hesabımı Kalıcı Olarak Sil
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          }
+
+        </div>
+      </div>
+
+    }
+  </div>
+</div>

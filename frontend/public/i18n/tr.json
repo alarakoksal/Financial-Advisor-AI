@@ -1,0 +1,22 @@
+{
+  "landing": {
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol",
+    "hero": {
+      "title": "Finansal geleceğinizi birlikte şekillendirelim",
+      "subtitle": "Gelir, gider ve hedeflerinizi analiz edin. Yapay zeka destekli kişisel finansal öneriler alın.",
+      "cta": "Hemen Başla"
+    },
+    "features": {
+      "title": "Neler sunuyoruz?"
+    },
+    "feature1": "Finansal durumunuzu detaylı analiz edin",
+    "feature2": "Yapay zeka destekli kişisel öneriler alın",
+    "feature3": "Hedeflerinizi belirleyin ve takip edin",
+    "feature4": "Akıllı finansal bildirimler ile farkında olun",
+    "cta": {
+      "title": "Finansal özgürlüğünüze giden yolda ilk adımı atın",
+      "button": "Ücretsiz Kayıt Ol"
+    }
+  }
+}
